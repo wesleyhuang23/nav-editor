@@ -1,9 +1,10 @@
 <template>
   <div class="home">
-    <h1>Navigation</h1>
-    <a class="btn-success">Add Nav</a>
-    <hr>
+    
     <div class="container-fluid">
+      <h1>Navigation</h1>
+      <a class="btn-success">Add Nav</a>
+      <hr>
       <div class="row">
         <div class="col-lg-4">
           <h2>Nav Categories</h2>
@@ -22,7 +23,7 @@
               <tbody>
                 <tr v-for="entry in gridData">
                   <td v-for="key in gridColumns">
-                    {{entry[key]}}
+                    <router-link to="/navitem">{{entry[key] | capitalize}}</router-link>
                   </td>
                 </tr>
               </tbody>
@@ -39,12 +40,16 @@ export default {
   name: 'hello',
   data () {
     return {
-      gridColumns: ['name', 'power'],
+      gridColumns: ['name'],
       gridData: [
-        { name: 'Chuck Norris', power: Infinity },
-        { name: 'Bruce Lee', power: 9000 },
-        { name: 'Jackie Chan', power: 7000 },
-        { name: 'Jet Li', power: 8000 }
+        { name: 'boats' },
+        { name: "women's" },
+        { name: "men's"},
+        { name: 'accessories' },
+        { name: 'tools & gear' },
+        { name: "camp home" },
+        { name: "gift cards"},
+        { name: 'outlet' }
       ]
     }
   },
@@ -66,5 +71,28 @@ export default {
   .menu{
     border: 1px solid gray;
     background-color: white;
+    padding: 10px;
+  }
+  th{
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 20px;
+    background-color: white;
+  }
+  td{
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+    font-size: 20px;
+  }
+  tr{
+    border-bottom: 1px solid #EBEEF0;
+  }
+  table{
+    width: 100%;
+  }
+  span{
+    color: blue;
+    cursor: pointer;
   }
 </style>
