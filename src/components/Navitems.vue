@@ -24,8 +24,8 @@
                         </tr>
 
                         <tr v-for="items in navitems" class="navData">
-                            <td><input type="text" v-bind:value="items.name"></td>
-                            <td><input type="text" v-bind:value="items.link"></td>
+                            <td><input type="text" v-bind:value="items.name" v-on:keyup="updateName($event)"></td>
+                            <td><input type="text" v-bind:value="items.link" v-on:keyup="updateLink($event)"></td>
                             <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.name)">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
@@ -63,26 +63,34 @@ export default {
             }
         },
         update: function(){
-            var data = document.getElementsByClassName('navData');
-            
-            for(let i = 0; i < data.length; i++){
-                this.navitems.push({ name: data[i].cells[0].children[0]._value, link: this.navitems[i].link = data[i].cells[1].children[0]._value })
-            }
-            console.log(this.navitems.length);
-            for(var j = 0; j < (this.navitems.length / 2) + 1; j++){
-                this.navitems.splice(j, 1);
-            }
-            // this.update_local_storage();
-            // console.log(data);
-            // console.log(data[0].cells[0].children[0]._value);
-            // console.log(data[0].cells[1].children[0]._value);
+            console.log(this.navitems);
+            localStorage.data = JSON.stringify(this.navitems);
         },
         addItem: function(){
             this.navitems.push({name: '', link: ''});
         },
-        update_local_storage: function(){
-            console.log(this.navitems);
+        updateName: function(e){
+            let value = e.target.value;
+            let oldValue = e.target._value;
+            for(var i = 0; i < this.navitems.length; i++){
+                if(this.navitems[i].name === oldValue){
+                    this.navitems[i].name = value;
+                }
+            }
+        },
+        updateLink: function(e){
+            let value = e.target.value;
+            let oldValue = e.target._value;
+            for(var i = 0; i < this.navitems.length; i++){
+                if(this.navitems[i].link === oldValue){
+                    this.navitems[i].link = value;
+                }
+            }
         }
+    },
+    created() {
+        this.navitems = JSON.parse(localStorage.data);
+        console.log(this.navitems);
     }
 }
 </script>
