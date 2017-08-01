@@ -26,7 +26,7 @@
                         <tr v-for="items in navitems" class="navData">
                             <td><input type="text" v-bind:value="items.name" v-on:keyup="updateName($event)"></td>
                             <td><input type="text" v-bind:value="items.link" v-on:keyup="updateLink($event)"></td>
-                            <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.name)">
+                            <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
                             </td>
@@ -48,16 +48,16 @@ export default {
     data () {
         return {
             navitems: [
-                { name: 'outerwear', link: 'www.guideboat.co/womens/outerwear'},
-                { name: 'shoes', link: 'www.guideboat.co/womens/shoes'},
-                { name: 'coats', link: 'www.guideboat.co/womens/coats'}
+                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear'},
+                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes'},
+                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats'}
             ],
         }
     },
     methods: {
-        removeItem: function(name){
+        removeItem: function(id){
             for(let i = 0; i < this.navitems.length; i++){
-                if(this.navitems[i].name === name){
+                if(this.navitems[i].id === id){
                     this.navitems.splice(i, 1);
                 }
             }
@@ -67,7 +67,8 @@ export default {
             localStorage.data = JSON.stringify(this.navitems);
         },
         addItem: function(){
-            this.navitems.push({name: '', link: ''});
+            var id = this.navitems.lenght + 1;
+            this.navitems.push({id: id, name: '', link: ''});
         },
         updateName: function(e){
             let value = e.target.value;
