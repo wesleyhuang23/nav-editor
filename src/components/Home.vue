@@ -25,6 +25,10 @@
                   <td v-for="key in gridColumns">
                     <router-link :to="{name: 'NavItem', params: {name: entry.name} }">{{entry[key] | capitalize}}</router-link>
                   </td>
+                  <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </a>
+                            </td>
                 </tr>
               </tbody>
             </table>

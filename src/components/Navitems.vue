@@ -48,9 +48,9 @@ export default {
     data () {
         return {
             subNavItem: [
-                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear'},
-                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes'},
-                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats'}
+                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats'},
+                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats'},
+                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats'}
             ],
         }
     },
@@ -68,7 +68,8 @@ export default {
         },
         addItem: function(){
             var id = this.subNavItem.length + 1;
-            this.subNavItem.push({id: id, name: '', link: ''});
+            var parent = this.$route.params.name;
+            this.subNavItem.push({id: id, name: '', link: '', parent: parent,});
         },
         updateName: function(e){
             let value = e.target.value;
@@ -91,7 +92,14 @@ export default {
     },
     created() {
         if(localStorage.data){
-            this.subNavItem = JSON.parse(localStorage.data);
+            var db = JSON.parse(localStorage.data);
+            var state = [];
+            for(let i = 0; i < db.length; i++){
+                if(db[i].parent === this.$route.params.name){
+                    state.push(db[i]);
+                }
+            }
+            this.subNavItem = state;
         }
         console.log(this.subNavItem);
     }
