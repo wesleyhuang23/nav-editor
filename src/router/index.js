@@ -13,7 +13,7 @@ export default new Router({
       component: Hello
     },
     {
-      path: '/navitem',
+      path: '/navitem/:name',
       name: 'NavItem',
       component: NavItem,
     }

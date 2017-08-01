@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-lg-6">
                     <p>Name</p>
-                    <input type="text">
+                    <input type="text" :value="this.$route.params.name">
                 </div>
             </div>
             <hr>
@@ -23,7 +23,7 @@
                             <th>Link</th>
                         </tr>
 
-                        <tr v-for="items in navitems" class="navData">
+                        <tr v-for="items in subNavItem" class="navData">
                             <td><input type="text" v-bind:value="items.name" v-on:keyup="updateName($event)"></td>
                             <td><input type="text" v-bind:value="items.link" v-on:keyup="updateLink($event)"></td>
                             <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
@@ -47,7 +47,7 @@
 export default {
     data () {
         return {
-            navitems: [
+            subNavItem: [
                 { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear'},
                 { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes'},
                 { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats'}
@@ -56,42 +56,44 @@ export default {
     },
     methods: {
         removeItem: function(id){
-            for(let i = 0; i < this.navitems.length; i++){
-                if(this.navitems[i].id === id){
-                    this.navitems.splice(i, 1);
+            for(let i = 0; i < this.subNavItem.length; i++){
+                if(this.subNavItem[i].id === id){
+                    this.subNavItem.splice(i, 1);
                 }
             }
         },
         update: function(){
-            console.log(this.navitems);
-            localStorage.data = JSON.stringify(this.navitems);
+            console.log(this.subNavItem);
+            localStorage.data = JSON.stringify(this.subNavItem);
         },
         addItem: function(){
-            var id = this.navitems.lenght + 1;
-            this.navitems.push({id: id, name: '', link: ''});
+            var id = this.subNavItem.length + 1;
+            this.subNavItem.push({id: id, name: '', link: ''});
         },
         updateName: function(e){
             let value = e.target.value;
             let oldValue = e.target._value;
-            for(var i = 0; i < this.navitems.length; i++){
-                if(this.navitems[i].name === oldValue){
-                    this.navitems[i].name = value;
+            for(var i = 0; i < this.subNavItem.length; i++){
+                if(this.subNavItem[i].name === oldValue){
+                    this.subNavItem[i].name = value;
                 }
             }
         },
         updateLink: function(e){
             let value = e.target.value;
             let oldValue = e.target._value;
-            for(var i = 0; i < this.navitems.length; i++){
-                if(this.navitems[i].link === oldValue){
-                    this.navitems[i].link = value;
+            for(var i = 0; i < this.subNavItem.length; i++){
+                if(this.subNavItem[i].link === oldValue){
+                    this.subNavItem[i].link = value;
                 }
             }
         }
     },
     created() {
-        this.navitems = JSON.parse(localStorage.data);
-        console.log(this.navitems);
+        if(localStorage.data){
+            this.subNavItem = JSON.parse(localStorage.data);
+        }
+        console.log(this.subNavItem);
     }
 }
 </script>

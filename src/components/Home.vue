@@ -23,7 +23,7 @@
               <tbody>
                 <tr v-for="entry in gridData">
                   <td v-for="key in gridColumns">
-                    <router-link to="/navitem">{{entry[key] | capitalize}}</router-link>
+                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }">{{entry[key] | capitalize}}</router-link>
                   </td>
                 </tr>
               </tbody>
