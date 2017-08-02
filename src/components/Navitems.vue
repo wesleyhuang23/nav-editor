@@ -2,10 +2,10 @@
     <div class="navItem">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <h1>Menu</h1>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-8 col-md-6">
                     <p>Name</p>
                     <input type="text" :value="this.$route.params.name">
                 </div>
@@ -70,7 +70,6 @@ export default {
             }
         },
         update: function(){
-            console.log(this.subNavItem);
             localStorage.data = JSON.stringify(this.subNavItem);
         },
         addItem: function(){
@@ -98,10 +97,9 @@ export default {
             }
         },
         exportNav: function(e){
-            var outerHTML = `<li class="nav-mobile--dig">`+ this.subNavItem[0].parent +`</li>
+            var outerHTML = `                   <li class="nav-mobile--dig">`+ this.subNavItem[0].parent +`</li>
                     <ul class="nav--mobile nav-mobile--level-two">
-                        <li class="nav-mobile--back">Back</li>
-                    `
+                        <li class="nav-mobile--back">Back</li>`
             //creating subitem html
             var final = [];
             for(var i = 0; i < this.subNavItem.length; i++){
@@ -111,13 +109,15 @@ export default {
             var combine;
             for(var j = 0; j < final.length; j++){
                 if(j === 0){
-                    combine = outerHTML + final[j];
+                    combine = outerHTML + `
+                        ` + final[j];
                 } else {
-                    var combine = combine + final[j];
+                    var combine = combine + `
+                        ` + final[j];
                 }
             }
             textarea.innerHTML = combine + `
-            </ul>`;
+                   </ul>`;
 
             this.update();
         }
@@ -133,7 +133,6 @@ export default {
             }
             this.subNavItem = state;
         }
-        console.log(this.subNavItem);
     }
 }
 </script>
