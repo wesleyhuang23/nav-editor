@@ -3,7 +3,8 @@
     
     <div class="container-fluid">
       <h1>Navigation</h1>
-      <a class="btn-success">Add Nav</a>
+      <input type="text" v-model="menuItem">
+      <a class="btn-success" v-on:click="addMenu(menuItem)">Add Nav</a>
       <hr>
       <div class="row">
         <div class="col-lg-4">
@@ -23,12 +24,13 @@
               <tbody>
                 <tr v-for="entry in gridData">
                   <td v-for="key in gridColumns">
-                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }">{{entry[key] | capitalize}}</router-link>
+                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }">{{ entry[key] | capitalize }}</router-link>
                   </td>
-                  <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                            </a>
-                            </td>
+                  <td>
+                    <a class="btn btn-default btn-sm" v-on:click="removeItem(entry.id)">
+                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -46,16 +48,30 @@ export default {
     return {
       gridColumns: ['name'],
       gridData: [
-        { name: 'boats' },
-        { name: "women's" },
-        { name: "men's"},
-        { name: 'accessories' },
-        { name: 'tools & gear' },
-        { name: "camp home" },
-        { name: "gift cards"},
-        { name: 'outlet' }
-      ]
+        { id: 1, name: 'boats' },
+        { id: 2, name: "women's" },
+        { id: 3, name: "men's"},
+        { id: 4, name: 'accessories' },
+        { id: 5, name: 'tools & gear' },
+        { id: 6, name: "camp home" },
+        { id: 7, name: "gift cards"},
+        { id: 8, name: 'outlet' }
+      ],
+      menuItem: ''
     }
+  },
+  methods: {
+    addMenu: function(menuItem){
+      var id = this.gridData.length + 1;
+      this.gridData.push({id: id, name: menuItem});
+    },
+    removeItem: function(id){
+      for(var i = this.gridData.length - 1; i >= 0; i--){
+        if(this.gridData[i].id == id){
+          this.gridData.splice(i, 1);
+        }
+      }
+    } 
   },
   filters: {
     capitalize: function (str) {
