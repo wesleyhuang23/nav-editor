@@ -1,28 +1,27 @@
 <template>
     <div class="navItem">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6">
                     <h1>Menu</h1>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-md-6">
                     <p>Name</p>
                     <input type="text" :value="this.$route.params.name">
                 </div>
             </div>
             <hr>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4 col-md-6">
                     <h1>Nav Items</h1>
                     <button class="btn btn-default" v-on:click="addItem()">Add Nav Item</button>
                 </div>
-                <div class="col-lg-6 navitems">
+                <div class="col-lg-8 col-md-6 navitems">
                     <table>
                         <tr>
                             <th>Name</th>
                             <th>Link</th>
                         </tr>
-
                         <tr v-for="items in subNavItem" class="navData">
                             <td><input type="text" v-bind:value="items.name" v-on:keyup="updateName($event)"></td>
                             <td><input type="text" v-bind:value="items.link" v-on:keyup="updateLink($event)"></td>
@@ -36,8 +35,16 @@
             </div>
             <hr>
             <div class="row actions">
-                <button class="btn btn-danger">Delete</button>
                 <button class="btn btn-success" v-on:click="update()">Save</button>
+                <button class="btn btn-info" v-on:click="exportNav()">Export</button>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <textarea></textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -69,7 +76,7 @@ export default {
         addItem: function(){
             var id = this.subNavItem.length + 1;
             var parent = this.$route.params.name;
-            this.subNavItem.push({id: id, name: '', link: '', parent: parent,});
+            this.subNavItem.push({id: id, name: '', link: '', parent: parent});
         },
         updateName: function(e){
             let value = e.target.value;
@@ -88,6 +95,29 @@ export default {
                     this.subNavItem[i].link = value;
                 }
             }
+        },
+        exportNav: function(e){
+            var outerHTML = `<li class="nav-mobile--dig">`+ this.subNavItem[0].parent +`</li>
+                    <ul class="nav--mobile nav-mobile--level-two">
+                        <li class="nav-mobile--back">Back</li>
+                    `
+            //creating subitem html
+            var final = [];
+            for(var i = 0; i < this.subNavItem.length; i++){
+               final.push('<li><span class="widget widget-category-link"><a href="'+ this.subNavItem[i].link +'" title="'+ this.subNavItem[i].name +'"><span>' + this.subNavItem[i].name + '</span></a></span></li>')
+            }
+            var textarea = document.getElementsByTagName('textarea')[0];
+            var combine;
+            for(var j = 0; j < final.length; j++){
+                if(j === 0){
+                    combine = outerHTML + final[j];
+                } else {
+                    var combine = combine + final[j];
+                }
+                
+            }
+            textarea.innerHTML = combine + `
+            </ul>`;
         }
     },
     created() {
@@ -109,16 +139,28 @@ export default {
 <style lang="scss" scoped>
     input{
         width: 90%;
+        margin-bottom:5px;
+    }
+    input:first-child{
+        margin-top:5px;
     }
     hr{
         width: 100%;
-        height: 2px;
+        height: 5px;
     }
-    th, td, input{
+    th, td, input, tr{
         background-color:white;
+        font-size: 17px;
+    }
+    textarea{
+        width: 100%;
+        height: 500px;
     }
     table{
         width: 100%;
+    }
+    button{
+        margin-bottom:20px;
     }
     .navitems{
         background-color: white;
