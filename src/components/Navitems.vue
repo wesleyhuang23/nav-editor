@@ -55,9 +55,9 @@ export default {
     data () {
         return {
             subNavItem: [
-                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats'},
-                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats'},
-                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats'}
+                // { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats'},
+                // { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats'},
+                // { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats'}
             ],
         }
     },
@@ -70,13 +70,26 @@ export default {
             }
         },
         update: function(){
-            localStorage.data = JSON.stringify(this.subNavItem);
+            if(localStorage.data){
+                var db = JSON.parse(localStorage.data);
+                //remove previous data relating to local state to avoid duplicates
+                for(let i = 0; i < db.length; i++){
+                    if(db[i].parent === this.$route.params.name){
+                        db.splice(i, 1);
+                    }
+                }
+                for(let j = 0; j < this.subNavItem.length; j++){
+                    db.push(this.subNavItem[j]);
+                }
+                localStorage.data = JSON.stringify(db);
+            } else {
+                localStorage.data = JSON.stringify(this.subNavItem);
+            }
         },
         addItem: function(){
             var id = this.subNavItem.length + 1;
             var parent = this.$route.params.name;
             this.subNavItem.push({id: id, name: '', link: '', parent: parent});
-            this.update();
         },
         updateName: function(e, id){
             let value = e.target.value;
