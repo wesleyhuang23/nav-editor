@@ -73,11 +73,14 @@ export default {
             if(localStorage.data){
                 var db = JSON.parse(localStorage.data);
                 //remove previous data relating to local state to avoid duplicates
-                for(let i = 0; i < db.length; i++){
-                    if(db[i].parent === this.$route.params.name){
+                for(let i = db.length - 1; i >= 0; i--){
+                    if(db[i].parent === this.subNavItem[0].parent){
                         db.splice(i, 1);
+                        console.log('asd');
                     }
                 }
+                console.log(this.subNavItem);
+                console.log(db, 'db');
                 for(let j = 0; j < this.subNavItem.length; j++){
                     db.push(this.subNavItem[j]);
                 }
