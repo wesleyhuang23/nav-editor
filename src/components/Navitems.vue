@@ -23,8 +23,8 @@
                             <th>Link</th>
                         </tr>
                         <tr v-for="items in subNavItem" class="navData">
-                            <td><input type="text" v-bind:value="items.name" v-on:keyup="updateName($event)"></td>
-                            <td><input type="text" v-bind:value="items.link" v-on:keyup="updateLink($event)"></td>
+                            <td><input :id="items.id" type="text" :value="items.name" v-on:keyup="updateName($event, items.id)"></td>
+                            <td><input :id="items.id" type="text" :value="items.link" v-on:keyup="updateLink($event, items.id)"></td>
                             <td><a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
@@ -77,21 +77,22 @@ export default {
             var id = this.subNavItem.length + 1;
             var parent = this.$route.params.name;
             this.subNavItem.push({id: id, name: '', link: '', parent: parent});
+            this.update();
         },
-        updateName: function(e){
+        updateName: function(e, id){
             let value = e.target.value;
             let oldValue = e.target._value;
             for(var i = 0; i < this.subNavItem.length; i++){
-                if(this.subNavItem[i].name === oldValue){
+                if(this.subNavItem[i].name === oldValue && this.subNavItem[i].id === id){
                     this.subNavItem[i].name = value;
                 }
             }
         },
-        updateLink: function(e){
+        updateLink: function(e, id){
             let value = e.target.value;
             let oldValue = e.target._value;
             for(var i = 0; i < this.subNavItem.length; i++){
-                if(this.subNavItem[i].link === oldValue){
+                if(this.subNavItem[i].link === oldValue && this.subNavItem[i].id === id){
                     this.subNavItem[i].link = value;
                 }
             }
@@ -114,10 +115,11 @@ export default {
                 } else {
                     var combine = combine + final[j];
                 }
-                
             }
             textarea.innerHTML = combine + `
             </ul>`;
+
+            this.update();
         }
     },
     created() {
