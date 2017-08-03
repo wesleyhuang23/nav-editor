@@ -23,8 +23,17 @@
               </thead>
               <tbody>
                 <tr v-for="entry in gridData">
-                  <td v-for="key in gridColumns">
-                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }">{{ entry[key] | capitalize }}</router-link>
+                  <td v-for="key in gridColumns" :id="entry.id">
+                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }"><span>{{ entry[key] | capitalize }}</span></router-link>
+                    <div id="hide" class="edit-container">
+                      <input type="text" :value="entry.name"/>
+                      <button class="btn btn-success" v-on:click="saveMenuItem($event, entry.id)">Save</button>
+                    </div>
+                  </td>
+                  <td>
+                    <a class="btn btn-default btn-sm" v-on:click="editItem(entry.id)">
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </a>
                   </td>
                   <td>
                     <a class="btn btn-default btn-sm" v-on:click="removeItem(entry.id)">
@@ -57,13 +66,43 @@ export default {
         { id: 7, name: "gift cards"},
         { id: 8, name: 'outlet' }
       ],
-      menuItem: ''
+      menuItem: '',
     }
   },
   methods: {
     addMenu: function(menuItem){
       var id = this.gridData.length + 1;
       this.gridData.push({id: id, name: menuItem});
+    },
+    editItem: function(className){
+      var data = document.getElementById(className);
+      console.log(document.getElementsByTagName('td'));
+      var link = data.children[0];
+      var input = data.children[1];
+      link.style.display = 'none';
+      input.style.display = 'block';
+    },
+    saveMenuItem: function(e, id){
+      console.log(e);
+      var data = document.getElementById(id);
+      data.children[0].style.display = 'block';
+      var container = e.target.parentElement;
+      var input = container.children[0];
+      for(var i = 0; i < this.gridData.length; i++){
+        if(this.gridData[i].id === id){
+          console.log('sdf')
+          this.gridData[i].name = input.value;
+        }
+      }
+      container.style.display = 'none';
+      //update local storage with new parent values because of menu item change
+      var db = JSON.parse(localStorage.data);
+      for(var j = 0; j < db.length; j++){
+        if(db[j].parent === input._value){
+          db[j].parent = input.value;
+        }
+      }
+      localStorage.data = JSON.stringify(db);
     },
     removeItem: function(id){
       for(var i = this.gridData.length - 1; i >= 0; i--){
@@ -114,5 +153,11 @@ export default {
   span{
     color: blue;
     cursor: pointer;
+  }
+  #hide{
+    display: none;
+  }
+  #show{
+    display: inline-block;
   }
 </style>
