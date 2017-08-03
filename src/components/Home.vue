@@ -2,9 +2,20 @@
   <div class="home">
     
     <div class="container">
-      <h1>Navigation</h1>
-      <input type="text" v-model="menuItem">
-      <a class="btn-success" v-on:click="addMenu(menuItem)">Add Nav</a>
+      <div class="row">
+        <div class="col-lg-4">
+          <h1>Navigation</h1>
+        </div>
+        <div class="col-lg-8">
+          <h3>Menu Name</h3>
+          <input type="text" v-model="menuItem">
+          <h3>Menu Path Id</h3>
+          <input type="text" v-model="menuId">
+          <br>
+          <br>
+          <a class="btn-success" v-on:click="addMenu(menuItem, menuId)">Add Nav</a>
+        </div>
+      </div>
       <hr>
       <div class="row">
         <div class="col-lg-4">
@@ -76,13 +87,14 @@ export default {
         { id: 8, name: 'outlet', catagoryId: 81 }
       ],
       menuItem: '',
+      menuId: '',
       toEdit: [],
     }
   },
   methods: {
-    addMenu: function(menuItem){
+    addMenu: function(menuItem, menuId){
       var id = this.gridData.length + 1;
-      this.gridData.push({id: id, name: menuItem});
+      this.gridData.push({id: id, name: menuItem, catagoryId: menuId });
     },
     editItem: function(className){
       var data = document.getElementsByTagName('td');
