@@ -43,7 +43,8 @@
             <hr>
             <div class="row actions">
                 <button class="btn btn-success" v-on:click="update()">Save</button>
-                <button class="btn btn-info" v-on:click="exportNav()">Export</button>
+                <button class="btn btn-info" v-on:click="exportMobileNav()">Export Mobile Nav</button>
+                <button class="btn btn-warning" v-on:click="exportDesktopNav()">Export Desktop Nav</button>
             </div>
             <hr>
             <div class="container">
@@ -78,7 +79,7 @@ export default {
         },
         update: function () {
             if (localStorage.subNavItem) {
-                var db = JSON.parse(localStorage.data);
+                var db = JSON.parse(localStorage.subNavItem);
                 //remove previous data relating to local state to avoid duplicates
                 for (let i = db.length - 1; i >= 0; i--) {
                     if (db[i].parent === this.subNavItem[0].parent) {
@@ -116,7 +117,7 @@ export default {
                 }
             }
         },
-        exportNav: function (e) {
+        exportMobileNav: function (e) {
             var outerHTML = `                   <li class="nav-mobile--dig">` + this.subNavItem[0].parent + `</li>
                     <ul class="nav--mobile nav-mobile--level-two">
                         <li class="nav-mobile--back">Back</li>`
@@ -138,6 +139,38 @@ export default {
             }
             textarea.innerHTML = combine + `
                    </ul>`;
+            this.update();
+        },
+        exportDesktopNav: function(){
+            var outerHTML = `                   <li>
+                    <a style="text-decoration: none; cursor: default;" title="`+ this.$route.params.name + `"> `+ this.$route.params.name +`</a>
+                    <div class="dropdown">
+                        <ul>
+                            <li>
+                                <ul class="dropdown2">`
+            //creating subitem html
+            var final = [];
+            for (var i = 0; i < this.subNavItem.length; i++) {
+                final.push(`            <li>{{widget type="catalog/category_widget_link" anchor_text="`+ this.subNavItem[i].name +`" title="`+ this.subNavItem[i].name +`" template="catalog/category/widget/link/link_block.phtml" id_path="category/`+ this.$route.params.id +`"}}</li>`)
+            }
+            var textarea = document.getElementsByTagName('textarea')[0];
+            var combine;
+            for (var j = 0; j < final.length; j++) {
+                if (j === 0) {
+                    combine = outerHTML + `
+                        ` + final[j];
+                } else {
+                    var combine = combine + `
+                        ` + final[j];
+                }
+            }
+            textarea.innerHTML = combine + `
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                `;
             this.update();
         }
     },
@@ -180,8 +213,9 @@ tr {
 }
 
 textarea {
-    width: 100%;
+    width: 110%;
     height: 500px;
+    margin-bottom: 100px;
 }
 
 table {
