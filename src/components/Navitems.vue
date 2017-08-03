@@ -20,23 +20,31 @@
                 </div>
                 <div class="col-lg-8 col-md-6 navitems">
                     <table>
-                        <tr>
-                            <th>Name</th>
-                            <th>Link</th>
-                        </tr>
-                        <tr v-for="items in subNavItem" class="navData">
-                            <td>
-                                <input :id="items.id" type="text" :value="items.name" v-on:keyup="updateName($event, items.id)">
-                            </td>
-                            <td>
-                                <input :id="items.id" type="text" :value="items.link" v-on:keyup="updateLink($event, items.id)">
-                            </td>
-                            <td>
-                                <a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
-                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                </a>
-                            </td>
-                        </tr>
+                        <draggable v-model="list" :element="'tbody'">
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Link</th>
+                            </tr>
+                            <tr v-for="items in subNavItem" class="navData">
+                                <td align="center">
+                                    <a>
+                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <input :id="items.id" type="text" :value="items.name" v-on:keyup="updateName($event, items.id)">
+                                </td>
+                                <td>
+                                    <input :id="items.id" type="text" :value="items.link" v-on:keyup="updateLink($event, items.id)">
+                                </td>
+                                <td>
+                                    <a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </draggable>
                     </table>
                 </div>
             </div>
@@ -59,7 +67,12 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 export default {
+    name: 'hello',
+    components: {
+        draggable,
+    },
     data() {
         return {
             subNavItem: [
@@ -174,6 +187,16 @@ export default {
             this.update();
         }
     },
+    computed: {
+        list: {
+            get() {
+                return this.value
+            },
+            set(value) {
+                this.$emit('input', value)
+            }
+        }
+	},
     created() {
         if (localStorage.subNavItem) {
             var db = JSON.parse(localStorage.subNavItem);

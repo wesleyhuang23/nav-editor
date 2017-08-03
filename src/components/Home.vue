@@ -27,6 +27,8 @@
             <table>
               <thead>
                 <tr>
+                  <th>
+                  </th>
                   <th v-for="key in gridColumns">
                     {{ key | capitalize }}
                   </th>
@@ -35,8 +37,13 @@
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <draggable v-model="list" :element="'tbody'">
                 <tr v-for="entry in gridData">
+                  <td align="center">
+                    <a>
+                      <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                    </a>
+                  </td>
                   <td v-for="key in gridColumns" :id="entry.id">
                     <router-link :to="{name: 'NavItem', params: { name: entry.name, id: entry.catagoryId } }"><span>{{ entry[key] | capitalize }}</span></router-link>
                     <div id="hide" class="edit-container">
@@ -61,7 +68,7 @@
                     </a>
                   </td>
                 </tr>
-              </tbody>
+              </draggable>
             </table>
           </div>
         </div>
@@ -71,8 +78,12 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 export default {
   name: 'hello',
+  components: {
+    draggable,
+  },
   data () {
     return {
       gridColumns: ['name'],
@@ -161,6 +172,16 @@ export default {
       return str.charAt(0).toUpperCase() + str.slice(1)
     }
   },
+  computed: {
+    list: {
+        get() {
+            return this.value
+        },
+        set(value) {
+            this.$emit('input', value)
+        }
+    }
+	},
   created() {
     if(localStorage.menuItems){
       this.gridData = JSON.parse(localStorage.menuItems);
