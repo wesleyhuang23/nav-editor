@@ -8,6 +8,8 @@
                 <div class="col-lg-8 col-md-6">
                     <p>Name</p>
                     <input type="text" :value="this.$route.params.name">
+                    <p>Path Id (for desktop nav)</p>
+                    <input type="text" :value="this.$route.params.id">
                 </div>
             </div>
             <hr>
@@ -60,9 +62,9 @@ export default {
     data() {
         return {
             subNavItem: [
-                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats'},
-                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats'},
-                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats'}
+                { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats', catagoryId: 6},
+                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats', catagoryId: 6},
+                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats', catagoryId: 6}
             ],
         }
     },

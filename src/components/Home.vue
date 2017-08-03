@@ -38,13 +38,13 @@
               <tbody>
                 <tr v-for="entry in gridData">
                   <td v-for="key in gridColumns" :id="entry.id">
-                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }"><span>{{ entry[key] | capitalize }}</span></router-link>
+                    <router-link :to="{name: 'NavItem', params: { name: entry.name, id: entry.catagoryId } }"><span>{{ entry[key] | capitalize }}</span></router-link>
                     <div id="hide" class="edit-container">
                       <input type="text" :value="entry.name"/>
                     </div>
                   </td>
                   <td :id="entry.id">
-                    <router-link :to="{name: 'NavItem', params: {name: entry.name} }"><span>{{ entry.catagoryId }}</span></router-link>
+                    <router-link :to="{name: 'NavItem', params: { name: entry.name, id: entry.catagoryId } }"><span>{{ entry.catagoryId }}</span></router-link>
                     <div id="hide" class="edit-container">
                       <input type="text" :value="entry.catagoryId"/>
                       <button class="btn btn-success" v-on:click="saveMenuItem($event, entry.id)">Save</button>
