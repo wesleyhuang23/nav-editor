@@ -75,7 +75,7 @@ export default {
             }
         },
         update: function () {
-            if (localStorage.data) {
+            if (localStorage.subNavItem) {
                 var db = JSON.parse(localStorage.data);
                 //remove previous data relating to local state to avoid duplicates
                 for (let i = db.length - 1; i >= 0; i--) {
@@ -86,9 +86,9 @@ export default {
                 for (let j = 0; j < this.subNavItem.length; j++) {
                     db.push(this.subNavItem[j]);
                 }
-                localStorage.data = JSON.stringify(db);
+                localStorage.subNavItem = JSON.stringify(db);
             } else {
-                localStorage.data = JSON.stringify(this.subNavItem);
+                localStorage.subNavItem = JSON.stringify(this.subNavItem);
             }
         },
         addItem: function () {
@@ -140,8 +140,8 @@ export default {
         }
     },
     created() {
-        if (localStorage.data) {
-            var db = JSON.parse(localStorage.data);
+        if (localStorage.subNavItem) {
+            var db = JSON.parse(localStorage.subNavItem);
             var state = [];
             for (let i = 0; i < db.length; i++) {
                 if (db[i].parent === this.$route.params.name) {

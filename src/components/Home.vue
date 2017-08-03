@@ -13,7 +13,7 @@
           <input type="text" v-model="menuId">
           <br>
           <br>
-          <a class="btn-success" v-on:click="addMenu(menuItem, menuId)">Add Nav</a>
+          <a class="btn-success" v-on:click="addMenu(menuItem, menuId)">Add Menu</a>
         </div>
       </div>
       <hr>
@@ -127,15 +127,25 @@ export default {
       this.toEdit[1].children[0].style.display = 'block'
       this.toEdit[1].children[1].style.display = 'none';
       //update local storage with new parent values because of menu item change
-      if(localStorage.data){
-        var db = JSON.parse(localStorage.data);
+      if(localStorage.subNavItem){
+        var db = JSON.parse(localStorage.subNavItem);
         for(var j = 0; j < db.length; j++){
           if(db[j].parent === nameInput._value){
             db[j].parent = nameInput.value;
             db[j].parentId = catInput.value;
           }
         }
-        localStorage.data = JSON.stringify(db);
+        localStorage.subNavItem = JSON.stringify(db);
+      }
+      if(localStorage.menuItems){
+        var menuDB = JSON.parse(localStorage.menuItems);
+        for(var x = 0; x < menuDB.length; x++){
+          if(menuDB[x].id == id){
+            menuDB[x].name = nameInput.value;
+            menuDB[x].catagoryId = catInput.value;
+          }
+        }
+        localStorage.menuItems = JSON.stringify(menuDB);
       }
     },
     removeItem: function(id){
@@ -151,6 +161,13 @@ export default {
       return str.charAt(0).toUpperCase() + str.slice(1)
     }
   },
+  created() {
+    if(localStorage.menuItems){
+      this.gridData = JSON.parse(localStorage.menuItems);
+    } else {
+      localStorage.menuItems = JSON.stringify(this.gridData);
+    }
+  }
 }
 </script>
 
@@ -159,6 +176,9 @@ export default {
   a{
     color: black;
     text-decoration: none;
+  }
+  input{
+    background-color: white;
   }
   span{
     color:black !important;
