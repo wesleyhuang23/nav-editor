@@ -27,34 +27,17 @@
             <table>
               <thead>
                 <tr>
-                  <th>
-                  </th>
                   <th v-for="key in gridColumns">
                     {{ key | capitalize }}
                   </th>
-                  <th>
-                    Path Id (For Desktop Nav)
-                  </th>
                 </tr>
               </thead>
-              <draggable v-model="list" :element="'tbody'">
+              <tbody>
                 <tr v-for="entry in gridData">
-                  <td align="center">
-                    <a>
-                      <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-                    </a>
-                  </td>
                   <td v-for="key in gridColumns" :id="entry.id">
-                    <router-link :to="{name: 'NavItem', params: { name: entry.name, id: entry.catagoryId } }"><span>{{ entry[key] | capitalize }}</span></router-link>
+                    <router-link :to="{name: 'NavItem', params: { name: entry.name } }"><span>{{ entry[key] | capitalize }}</span></router-link>
                     <div id="hide" class="edit-container">
                       <input type="text" :value="entry.name"/>
-                    </div>
-                  </td>
-                  <td :id="entry.id">
-                    <router-link :to="{name: 'NavItem', params: { name: entry.name, id: entry.catagoryId } }"><span>{{ entry.catagoryId }}</span></router-link>
-                    <div id="hide" class="edit-container">
-                      <input type="text" :value="entry.catagoryId"/>
-                      <button class="btn btn-success" v-on:click="saveMenuItem($event, entry.id)">Save</button>
                     </div>
                   </td>
                   <td align="right">
@@ -68,7 +51,7 @@
                     </a>
                   </td>
                 </tr>
-              </draggable>
+              </tbody>
             </table>
           </div>
         </div>
@@ -88,14 +71,14 @@ export default {
     return {
       gridColumns: ['name'],
       gridData: [
-        { id: 1, name: 'boats', catagoryId: 4 },
-        { id: 2, name: "women's", catagoryId: 209 },
-        { id: 3, name: "men's", catagoryId: 15 },
-        { id: 4, name: 'accessories', catagoryId: 67 },
-        { id: 5, name: 'tools & gear', catagoryId: 43 },
-        { id: 6, name: "camp home", catagoryId: 52 },
-        { id: 7, name: "gift cards", catagoryId: 56 },
-        { id: 8, name: 'outlet', catagoryId: 81 }
+        { id: 1, name: 'boats'},
+        { id: 2, name: "women's"},
+        { id: 3, name: "men's" },
+        { id: 4, name: 'accessories' },
+        { id: 5, name: 'tools & gear' },
+        { id: 6, name: "camp home" },
+        { id: 7, name: "gift cards" },
+        { id: 8, name: 'outlet' }
       ],
       menuItem: '',
       menuId: '',
@@ -117,33 +100,24 @@ export default {
       }
       var nameLink = this.toEdit[0].children[0];
       var nameInput = this.toEdit[0].children[1];
-      var pathLink = this.toEdit[1].children[0];
-      var pathInput = this.toEdit[1].children[1];
       nameLink.style.display = 'none';
       nameInput.style.display = 'block';
-      pathLink.style.display = 'none';
-      pathInput.style.display = 'block';
     },
     saveMenuItem: function(e, id){
       var nameInput = this.toEdit[0].children[1].children[0];
-      var catInput = this.toEdit[1].children[1].children[0];
       for(var i = 0; i < this.gridData.length; i++){
         if(this.gridData[i].id === id){
           this.gridData[i].name = nameInput.value;
-          this.gridData[i].catagoryId = catInput.value;
         }
       }
       this.toEdit[0].children[0].style.display = 'block';
       this.toEdit[0].children[1].style.display = 'none';
-      this.toEdit[1].children[0].style.display = 'block'
-      this.toEdit[1].children[1].style.display = 'none';
       //update local storage with new parent values because of menu item change
       if(localStorage.subNavItem){
         var db = JSON.parse(localStorage.subNavItem);
         for(var j = 0; j < db.length; j++){
           if(db[j].parent === nameInput._value){
             db[j].parent = nameInput.value;
-            db[j].parentId = catInput.value;
           }
         }
         localStorage.subNavItem = JSON.stringify(db);

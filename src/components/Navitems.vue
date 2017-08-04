@@ -8,8 +8,6 @@
                 <div class="col-lg-8 col-md-6">
                     <p>Name</p>
                     <input type="text" :value="this.$route.params.name">
-                    <p>Path Id (for desktop nav)</p>
-                    <input type="text" :value="this.$route.params.id">
                 </div>
             </div>
             <hr>
@@ -25,6 +23,7 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Link</th>
+                                <th>Path Id</th>
                             </tr>
                             <tr v-for="items in subNavItem" class="navData">
                                 <td align="center">
@@ -37,6 +36,9 @@
                                 </td>
                                 <td>
                                     <input :id="items.id" type="text" :value="items.link" v-on:keyup="updateLink($event, items.id)">
+                                </td>
+                                <td>
+                                    <input :id="items.id" type="text" :value="items.catagoryId" v-on:keyup="updatePath($event, items.id)">
                                 </td>
                                 <td>
                                     <a class="btn btn-default btn-sm" v-on:click="removeItem(items.id)">
@@ -77,8 +79,8 @@ export default {
         return {
             subNavItem: [
                 { id: 1, name: 'outerwear', link: 'www.guideboat.co/womens/outerwear', parent: 'boats', catagoryId: 6},
-                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats', catagoryId: 6},
-                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats', catagoryId: 6}
+                { id: 2, name: 'shoes', link: 'www.guideboat.co/womens/shoes', parent: 'boats', catagoryId: 7},
+                { id: 3, name: 'coats', link: 'www.guideboat.co/womens/coats', parent: 'boats', catagoryId: 10}
             ],
         }
     },
@@ -127,6 +129,15 @@ export default {
             for (var i = 0; i < this.subNavItem.length; i++) {
                 if (this.subNavItem[i].link === oldValue && this.subNavItem[i].id === id) {
                     this.subNavItem[i].link = value;
+                }
+            }
+        },
+        updatePath: function(e, id){
+            let value = e.target.value;
+            let oldValue = e.target._value;
+            for (var i = 0; i < this.subNavItem.length; i++) {
+                if (this.subNavItem[i].catagoryId === oldValue && this.subNavItem[i].id === id) {
+                    this.subNavItem[i].catagoryId = value;
                 }
             }
         },
@@ -187,12 +198,9 @@ export default {
             this.update();
         },
         start: function(e){
-            console.log(e)
-            console.log(this.subNavItem);
             var old = this.subNavItem[e.newIndex - 1];
             this.subNavItem[e.newIndex - 1] = this.subNavItem[e.oldIndex - 1];
             this.subNavItem[e.oldIndex - 1] = old;
-            console.log(old);
             console.log(this.subNavItem);
             this.update();
         }
