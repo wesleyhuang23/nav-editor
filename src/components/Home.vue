@@ -38,6 +38,7 @@
                     <router-link :to="{name: 'NavItem', params: { name: entry.name } }"><span>{{ entry[key] | capitalize }}</span></router-link>
                     <div id="hide" class="edit-container">
                       <input type="text" :value="entry.name"/>
+                      <button class="btn btn-success" v-on:click="saveMenuItem($event, entry.id)">Save</button>
                     </div>
                   </td>
                   <td align="right">
@@ -46,7 +47,7 @@
                     </a>
                   </td>
                   <td align="left">
-                    <a class="btn btn-default btn-sm" v-on:click="removeItem(entry.id)">
+                    <a class="btn btn-default btn-sm" v-on:click="removeItem(entry.id, entry.name)">
                       <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     </a>
                   </td>
@@ -127,18 +128,33 @@ export default {
         for(var x = 0; x < menuDB.length; x++){
           if(menuDB[x].id == id){
             menuDB[x].name = nameInput.value;
-            menuDB[x].catagoryId = catInput.value;
           }
         }
         localStorage.menuItems = JSON.stringify(menuDB);
       }
     },
-    removeItem: function(id){
+    removeItem: function(id, name){
       for(var i = this.gridData.length - 1; i >= 0; i--){
         if(this.gridData[i].id == id){
           this.gridData.splice(i, 1);
         }
       }
+      //remove items from data base 
+      var menudb = JSON.parse(localStorage.menuItems);
+      for(var j = menudb.length - 1; j >= 0; j--){
+        if(menudb[j].id == id){
+          menudb.splice(j, 1);
+        }
+      }
+      localStorage.menuItems = JSON.stringify(menudb);
+      //remove subnav items
+      var itemsdb = JSON.parse(localStorage.subNavItem);
+      for(var x = itemsdb.length - 1; x >= 0; x--){
+        if(itemsdb[x].parent === name){
+          itemsdb.splice(x, 1)
+        }
+      }
+      localStorage.subNavItem = JSON.stringify(itemsdb);
     } 
   },
   filters: {
@@ -168,10 +184,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  a{
-    color: black;
-    text-decoration: none;
-  }
   input{
     background-color: white;
   }

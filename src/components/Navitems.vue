@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-lg-8 col-md-6">
                     <p>Name</p>
-                    <input type="text" :value="this.$route.params.name">
+                    <input type="text" :value="this.$route.params.name" readonly>
                 </div>
             </div>
             <hr>
@@ -23,7 +23,7 @@
                                 <th></th>
                                 <th>Name</th>
                                 <th>Link</th>
-                                <th>Path Id</th>
+                                <th>Path Id (for desktop nav)</th>
                             </tr>
                             <tr v-for="items in subNavItem" class="navData">
                                 <td align="center">
@@ -112,7 +112,7 @@ export default {
         addItem: function () {
             var id = this.subNavItem.length + 1;
             var parent = this.$route.params.name;
-            this.subNavItem.push({ id: id, name: '', link: '', parent: parent });
+            this.subNavItem.push({ id: id, name: '', link: '', parent: parent, catagoryId: '' });
         },
         updateName: function (e, id) {
             let value = e.target.value;
@@ -136,7 +136,7 @@ export default {
             let value = e.target.value;
             let oldValue = e.target._value;
             for (var i = 0; i < this.subNavItem.length; i++) {
-                if (this.subNavItem[i].catagoryId === oldValue && this.subNavItem[i].id === id) {
+                if (this.subNavItem[i].catagoryId == oldValue && this.subNavItem[i].id == id) {
                     this.subNavItem[i].catagoryId = value;
                 }
             }
@@ -175,7 +175,7 @@ export default {
             //creating subitem html
             var final = [];
             for (var i = 0; i < this.subNavItem.length; i++) {
-                final.push(`            <li>{{widget type="catalog/category_widget_link" anchor_text="`+ this.subNavItem[i].name +`" title="`+ this.subNavItem[i].name +`" template="catalog/category/widget/link/link_block.phtml" id_path="category/`+ this.$route.params.id +`"}}</li>`)
+                final.push(`            <li>{{widget type="catalog/category_widget_link" anchor_text="`+ this.subNavItem[i].name +`" title="`+ this.subNavItem[i].name +`" template="catalog/category/widget/link/link_block.phtml" id_path="category/`+ this.subNavItem[i].catagoryId +`"}}</li>`)
             }
             var textarea = document.getElementsByTagName('textarea')[0];
             var combine;
