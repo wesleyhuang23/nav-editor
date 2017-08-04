@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-lg-8 col-md-6 navitems">
                     <table>
-                        <draggable v-model="list" :element="'tbody'">
+                        <draggable v-model="list" :element="'tbody'" @start="drag=true" @end="drag=false" @update="start">
                             <tr>
                                 <th></th>
                                 <th>Name</th>
@@ -29,7 +29,7 @@
                             <tr v-for="items in subNavItem" class="navData">
                                 <td align="center">
                                     <a>
-                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
                                     </a>
                                 </td>
                                 <td>
@@ -184,6 +184,16 @@ export default {
                         </div>
                     </li>
                 `;
+            this.update();
+        },
+        start: function(e){
+            console.log(e)
+            console.log(this.subNavItem);
+            var old = this.subNavItem[e.newIndex - 1];
+            this.subNavItem[e.newIndex - 1] = this.subNavItem[e.oldIndex - 1];
+            this.subNavItem[e.oldIndex - 1] = old;
+            console.log(old);
+            console.log(this.subNavItem);
             this.update();
         }
     },
