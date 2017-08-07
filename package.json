@@ -10,8 +10,18 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "express-session": "^1.15.5",
+    "method-override": "^2.3.9",
     "mongodb": "^2.2.30",
+    "mongoose": "^4.11.6",
+    "morgan": "^1.8.2",
     "node-sass": "^4.5.3",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "vue": "^2.3.3",
