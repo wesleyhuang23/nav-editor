@@ -34,17 +34,29 @@ var NavItems = mongoose.model('navItems', navItemSchema);
 
 app.get('/menu', function(req, res) {
   Menu.find({}, function(err, menus) {
-    console.log(menus);
+    console.log(menus, 'menus');
     res.send(menus);
   });
 });
 
 app.get('/navitems', function(req, res) {
   NavItems.find({}, function(err, navItems) {
-    console.log(navItems);
+    console.log(navItems, 'navitems');
     res.send(navItems);
   });
 });
+
+app.post('/menu', function(req, res){
+  console.log(req.body);
+  const newMenu = new Menu({
+    id: req.body.id,
+    name: req.body.name
+  })
+  newMenu.save(function(err, menu){
+    if(err) return res.status(500).json(err);
+    return res.status(200).json(menu);
+  });
+})
 
 
 // Users.find(function (err, Users) {

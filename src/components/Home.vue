@@ -188,6 +188,9 @@ export default {
       this.$http.get('/navItems').then(function(res){
         console.log(res.body, 'navitemsdb');
       })
+      this.$http.post('/menu', {id: 1, name: 'children'}).then(function(res){
+        console.log(red.body);
+      })
   }
 }
 </script>
