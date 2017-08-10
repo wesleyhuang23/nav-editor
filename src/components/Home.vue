@@ -154,7 +154,10 @@ export default {
         }
       }
       localStorage.subNavItem = JSON.stringify(itemsdb);
-    } 
+    },
+    getData(){
+      
+    }, 
   },
   filters: {
     capitalize: function (str) {
@@ -171,12 +174,20 @@ export default {
         }
     }
 	},
+  
   created() {
     if(localStorage.menuItems){
       this.gridData = JSON.parse(localStorage.menuItems);
     } else {
       localStorage.menuItems = JSON.stringify(this.gridData);
     }
+    console.log('asd')
+      this.$http.get('/menu').then(function(res){
+        console.log(res.body, 'menudb');
+      })
+      this.$http.get('/navItems').then(function(res){
+        console.log(res.body, 'navitemsdb');
+      })
   }
 }
 </script>

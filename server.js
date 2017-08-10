@@ -9,28 +9,52 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+app.use(bodyParser());
 // var configDB = require('./config/database.js');
 mongoose.connect('mongodb://localhost:27017');
 mongoose.connection.once('open',() => console.log('Connected to Mongo'));
 var db = mongoose.connection;
 
 
-var usersSchema = mongoose.Schema({
-  name: String
+var menuSchema = mongoose.Schema({
+  id: {type: Number, required: true, unique: true},
+  name: {type: String}
 });
 
-var Users = mongoose.model('Users', usersSchema);
-
-var john = new Users({name: 'John'});
-console.log(john);
-Users.find(function (err, Users) {
-  if (err) return console.error(err);
-  console.log(Users);
+var navItemSchema = mongoose.Schema({
+  id: {type: Number, required: true, unique: true},
+  name: {type: String},
+  link: {type: String},
+  parent: {type: String},
+  catagoryId: {type: Number}
 });
+
+var Menu = mongoose.model('Menu', menuSchema);
+var NavItems = mongoose.model('navItems', navItemSchema);
+
+app.get('/menu', function(req, res) {
+  Menu.find({}, function(err, menus) {
+    console.log(menus);
+    res.send(menus);
+  });
+});
+
+app.get('/navitems', function(req, res) {
+  NavItems.find({}, function(err, navItems) {
+    console.log(navItems);
+    res.send(navItems);
+  });
+});
+
+
+// Users.find(function (err, Users) {
+//   if (err) return console.error(err);
+//   console.log(Users);
+// });
 
 // app.use(morgan('dev'));
 // app.use(cookieParser());
-app.use(bodyParser());
+
 
 // app.use(session({ secret: 'ilsdkjfhgasdkg823tr7' }));
 // app.use(passport.initialize());

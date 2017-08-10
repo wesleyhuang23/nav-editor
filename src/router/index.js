@@ -11,7 +11,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Login
+      component: Hello
     },
     {
       path: '/navitem/:name',
