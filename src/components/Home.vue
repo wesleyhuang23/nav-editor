@@ -89,6 +89,7 @@ export default {
     addMenu: function(menuItem, menuId){
       var id = this.gridData.length + 1;
       this.gridData.push({id: id, name: menuItem, catagoryId: menuId });
+      this.$http.post('/menu', { id: menuId, name: menuItem });
     },
     editItem: function(className){
       var data = document.getElementsByTagName('td');
@@ -138,22 +139,10 @@ export default {
           this.gridData.splice(i, 1);
         }
       }
-      //remove items from data base 
-      var menudb = JSON.parse(localStorage.menuItems);
-      for(var j = menudb.length - 1; j >= 0; j--){
-        if(menudb[j].id == id){
-          menudb.splice(j, 1);
-        }
-      }
-      localStorage.menuItems = JSON.stringify(menudb);
-      //remove subnav items
-      var itemsdb = JSON.parse(localStorage.subNavItem);
-      for(var x = itemsdb.length - 1; x >= 0; x--){
-        if(itemsdb[x].parent === name){
-          itemsdb.splice(x, 1)
-        }
-      }
-      localStorage.subNavItem = JSON.stringify(itemsdb);
+      console.log('remove')
+      this.$http.delete('/delete').then(function(res){
+        this.gridData = res.body;
+      })
     },
     getData(){
       
@@ -176,21 +165,22 @@ export default {
 	},
   
   created() {
-    if(localStorage.menuItems){
-      this.gridData = JSON.parse(localStorage.menuItems);
-    } else {
-      localStorage.menuItems = JSON.stringify(this.gridData);
-    }
+    // if(localStorage.menuItems){
+    //   this.gridData = JSON.parse(localStorage.menuItems);
+    // } else {
+    //   localStorage.menuItems = JSON.stringify(this.gridData);
+    // }
     console.log('asd')
       this.$http.get('/menu').then(function(res){
         console.log(res.body, 'menudb');
+        this.gridData = res.body;
       })
       this.$http.get('/navItems').then(function(res){
         console.log(res.body, 'navitemsdb');
       })
-      this.$http.post('/menu', {id: 1, name: 'children'}).then(function(res){
-        console.log(red.body);
-      })
+      // this.$http.post('/menu', {id: 1, name: 'children'}).then(function(res){
+      //   console.log(red.body);
+      // })
   }
 }
 </script>
