@@ -62,9 +62,13 @@ app.post('/menu', function(req, res){
   });
 })
 
-app.delete('/delete', function(req, res){
-  console.log('we r in delete',res);
-  // Menu.findOneAndRemove({id: res.body});
+app.delete('/delete/:id', function(req, res){
+  console.log('we r in delete',req.params);
+  Menu.findOneAndRemove({id: req.params.id}, function(err, removedItem){
+    console.log(removedItem);
+    return res.status(200).json(removedItem);
+  });
+  
 })
 
 app.use(express.static('dist'));

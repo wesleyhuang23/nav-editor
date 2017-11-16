@@ -88,8 +88,9 @@ export default {
   methods: {
     addMenu: function(menuItem, menuId){
       var id = this.gridData.length + 1;
-      this.gridData.push({id: id, name: menuItem, catagoryId: menuId });
-      this.$http.post('/menu', { id: menuId, name: menuItem });
+      this.$http.post('/menu', { id: menuId, name: menuItem }).then(function(res){
+        this.gridData = res.body;
+      });
     },
     editItem: function(className){
       var data = document.getElementsByTagName('td');
@@ -140,18 +141,18 @@ export default {
         }
       }
       console.log('remove')
-      this.$http.delete('/delete').then(function(res){
-        this.gridData = res.body;
+      this.$http.delete('/delete/' + id).then(function(res){
+        console.log('removed from db', res);
+        //get database again;
+        this.$http.get('/menu').then(function(res){
+          console.log(res.body, 'menudb');
+          this.gridData = res.body;
+        })
       })
     },
     getData(){
       
     }, 
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
-    }
   },
   computed: {
     list: {
@@ -215,6 +216,9 @@ export default {
     padding-right: 10px;
     background-color: white;
     font-size: 20px;
+    span{
+      text-transform: capitalize;
+    }
   }
   tr{
     border-bottom: 1px solid #EBEEF0;
