@@ -70,16 +70,7 @@ export default {
   data () {
     return {
       gridColumns: ['name'],
-      gridData: [
-        { id: 1, name: 'boats'},
-        { id: 2, name: "women's"},
-        { id: 3, name: "men's" },
-        { id: 4, name: 'accessories' },
-        { id: 5, name: 'tools & gear' },
-        { id: 6, name: "camp home" },
-        { id: 7, name: "gift cards" },
-        { id: 8, name: 'outlet' }
-      ],
+      gridData: [],
       menuItem: '',
       menuId: '',
       toEdit: [],
@@ -107,32 +98,42 @@ export default {
     },
     saveMenuItem: function(e, id){
       var nameInput = this.toEdit[0].children[1].children[0];
+      var newMenu;
       for(var i = 0; i < this.gridData.length; i++){
         if(this.gridData[i].id === id){
           this.gridData[i].name = nameInput.value;
+          var newMenu = this.gridData[i];
         }
       }
       this.toEdit[0].children[0].style.display = 'block';
       this.toEdit[0].children[1].style.display = 'none';
       //update local storage with new parent values because of menu item change
-      if(localStorage.subNavItem){
-        var db = JSON.parse(localStorage.subNavItem);
-        for(var j = 0; j < db.length; j++){
-          if(db[j].parent === nameInput._value){
-            db[j].parent = nameInput.value;
-          }
-        }
-        localStorage.subNavItem = JSON.stringify(db);
-      }
-      if(localStorage.menuItems){
-        var menuDB = JSON.parse(localStorage.menuItems);
-        for(var x = 0; x < menuDB.length; x++){
-          if(menuDB[x].id == id){
-            menuDB[x].name = nameInput.value;
-          }
-        }
-        localStorage.menuItems = JSON.stringify(menuDB);
-      }
+      // if(localStorage.subNavItem){
+      //   var db = JSON.parse(localStorage.subNavItem);
+      //   for(var j = 0; j < db.length; j++){
+      //     if(db[j].parent === nameInput._value){
+      //       db[j].parent = nameInput.value;
+      //     }
+      //   }
+      //   localStorage.subNavItem = JSON.stringify(db);
+      // }
+      // if(localStorage.menuItems){
+      //   var menuDB = JSON.parse(localStorage.menuItems);
+      //   for(var x = 0; x < menuDB.length; x++){
+      //     if(menuDB[x].id == id){
+      //       menuDB[x].name = nameInput.value;
+      //     }
+      //   }
+      //   localStorage.menuItems = JSON.stringify(menuDB);
+      // }
+      this.$http.put('/api/updateMenu', {body: newMenu }).then(function(res){
+        console.log('updated in db', res);
+        //get database again;
+        this.$http.get('/api/menu').then(function(res){
+          console.log(res.body, 'menudb');
+          this.gridData = res.body;
+        })
+      })
     },
     removeItem: function(id, name){
       for(var i = this.gridData.length - 1; i >= 0; i--){
@@ -141,10 +142,10 @@ export default {
         }
       }
       console.log('remove')
-      this.$http.delete('/delete/' + id).then(function(res){
+      this.$http.delete('/api/delete/' + id).then(function(res){
         console.log('removed from db', res);
         //get database again;
-        this.$http.get('/menu').then(function(res){
+        this.$http.get('/api/menu').then(function(res){
           console.log(res.body, 'menudb');
           this.gridData = res.body;
         })
@@ -172,11 +173,11 @@ export default {
     //   localStorage.menuItems = JSON.stringify(this.gridData);
     // }
     console.log('asd')
-      this.$http.get('/menu').then(function(res){
+      this.$http.get('/api/menu').then(function(res){
         console.log(res.body, 'menudb');
         this.gridData = res.body;
       })
-      this.$http.get('/navItems').then(function(res){
+      this.$http.get('/api/navItems').then(function(res){
         console.log(res.body, 'navitemsdb');
       })
       // this.$http.post('/menu', {id: 1, name: 'children'}).then(function(res){

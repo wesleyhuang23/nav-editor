@@ -34,7 +34,7 @@ var Menu = mongoose.model('Menu', menuSchema);
 var NavItems = mongoose.model('navItems', navItemSchema);
 
 //get parent menu items
-app.get('/menu', function(req, res) {
+app.get('/api/menu', function(req, res) {
   Menu.find({}, function(err, menus) {
     console.log(menus, 'menus');
     res.send(menus);
@@ -42,15 +42,24 @@ app.get('/menu', function(req, res) {
 });
 
 //get children menu items
-app.get('/navitems', function(req, res) {
+app.get('/api/navitems', function(req, res) {
   NavItems.find({}, function(err, navItems) {
     console.log(navItems, 'navitems');
     res.send(navItems);
   });
 });
 
+//update data
+app.put('/api/updateMenu', function(req, res){
+  console.log('body', req.body);
+  Menu.findByIdAndUpdate({_id: req.body.body._id}, req.body.body, function(err, updatedMenu) {
+    console.log(updatedMenu, 'updatedMenu');
+    res.send(updatedMenu);
+  });
+})
+
 //adding parent menu items
-app.post('/menu', function(req, res){
+app.post('/api/menu', function(req, res){
   console.log(req.body);
   const newMenu = new Menu({
     id: req.body.id,
@@ -62,7 +71,7 @@ app.post('/menu', function(req, res){
   });
 })
 
-app.delete('/delete/:id', function(req, res){
+app.delete('/api/delete/:id', function(req, res){
   console.log('we r in delete',req.params);
   Menu.findOneAndRemove({id: req.params.id}, function(err, removedItem){
     console.log(removedItem);
