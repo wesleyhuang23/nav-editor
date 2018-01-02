@@ -79,8 +79,11 @@ export default {
   methods: {
     addMenu: function(menuItem, menuId){
       var id = this.gridData.length + 1;
-      this.$http.post('/menu', { id: menuId, name: menuItem }).then(function(res){
-        this.gridData = res.body;
+      this.$http.post('/api/menu', { id: menuId, name: menuItem }).then(function(res){
+        this.$http.get('/api/menu').then((res) => {
+          console.log(res.body, 'menudb');
+          this.gridData = res.body;
+        })
       });
     },
     editItem: function(className){
@@ -142,10 +145,10 @@ export default {
         }
       }
       console.log('remove')
-      this.$http.delete('/api/delete/' + id).then(function(res){
+      this.$http.delete('/api/delete/' + id).then((res) => {
         console.log('removed from db', res);
         //get database again;
-        this.$http.get('/api/menu').then(function(res){
+        this.$http.get('/api/menu').then((res) => {
           console.log(res.body, 'menudb');
           this.gridData = res.body;
         })
