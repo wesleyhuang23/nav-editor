@@ -110,25 +110,6 @@ export default {
       }
       this.toEdit[0].children[0].style.display = 'block';
       this.toEdit[0].children[1].style.display = 'none';
-      //update local storage with new parent values because of menu item change
-      // if(localStorage.subNavItem){
-      //   var db = JSON.parse(localStorage.subNavItem);
-      //   for(var j = 0; j < db.length; j++){
-      //     if(db[j].parent === nameInput._value){
-      //       db[j].parent = nameInput.value;
-      //     }
-      //   }
-      //   localStorage.subNavItem = JSON.stringify(db);
-      // }
-      // if(localStorage.menuItems){
-      //   var menuDB = JSON.parse(localStorage.menuItems);
-      //   for(var x = 0; x < menuDB.length; x++){
-      //     if(menuDB[x].id == id){
-      //       menuDB[x].name = nameInput.value;
-      //     }
-      //   }
-      //   localStorage.menuItems = JSON.stringify(menuDB);
-      // }
       this.$http.put('/api/updateMenu', {body: newMenu }).then(function(res){
         console.log('updated in db', res);
         //get database again;
@@ -170,11 +151,6 @@ export default {
 	},
   
   created() {
-    // if(localStorage.menuItems){
-    //   this.gridData = JSON.parse(localStorage.menuItems);
-    // } else {
-    //   localStorage.menuItems = JSON.stringify(this.gridData);
-    // }
     console.log('asd')
       this.$http.get('/api/menu').then(function(res){
         console.log(res.body, 'menudb');
@@ -183,9 +159,6 @@ export default {
       this.$http.get('/api/navItems').then(function(res){
         console.log(res.body, 'navitemsdb');
       })
-      // this.$http.post('/menu', {id: 1, name: 'children'}).then(function(res){
-      //   console.log(red.body);
-      // })
   }
 }
 </script>

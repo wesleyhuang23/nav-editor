@@ -77,28 +77,7 @@
     },
     data() {
       return {
-        subNavItem: [{
-            id: 1,
-            name: 'outerwear',
-            link: 'www.guideboat.co/womens/outerwear',
-            parent: 'boats',
-            catagoryId: 6
-          },
-          {
-            id: 2,
-            name: 'shoes',
-            link: 'www.guideboat.co/womens/shoes',
-            parent: 'boats',
-            catagoryId: 7
-          },
-          {
-            id: 3,
-            name: 'coats',
-            link: 'www.guideboat.co/womens/coats',
-            parent: 'boats',
-            catagoryId: 10
-          }
-        ],
+        subNavItem: [],
       }
     },
     methods: {
@@ -239,16 +218,15 @@
       }
     },
     created() {
-      if (localStorage.subNavItem) {
-        var db = JSON.parse(localStorage.subNavItem);
+      this.$http.get('/api/navItems').then(function(res){
+        console.log(res.body, 'navitemsdb');
         var state = [];
-        for (let i = 0; i < db.length; i++) {
-          if (db[i].parent === this.$route.params.name) {
-            state.push(db[i]);
+        for (let i = 0; i < res.body.length; i++) {
+          if (res.body[i].parent === this.$route.params.name) {
+            state.push(res.body[i]);
           }
         }
-        this.subNavItem = state;
-      }
+      })
     }
   }
 </script>
